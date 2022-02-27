@@ -8,30 +8,32 @@ import json
 
 WINDOW_NAME = "Visual"
 
-def write_to_center(frame, lines, font_size=0.5, padding=10, color=(255, 255, 255)):
+# We want a easily visible bold font
+preferred_font = cv2.FONT_HERSHEY_SIMPLEX
+
+def write_to_center(frame, lines, font_size=0.5, padding=10, color=(255, 255, 255), thickness=1):
     """
     Writes each line to the center of the frame.
     """
     text_sizes = []
     for line in lines:
-        text_size = cv2.getTextSize(line, cv2.FONT_HERSHEY_SIMPLEX, font_size, 1)[0]
+        text_size = cv2.getTextSize(line, preferred_font, font_size, 1)[0]
         text_sizes.append(text_size)
     total_height = sum([text_size[1] for text_size in text_sizes]) + padding * (len(lines) - 1)
     text_y = frame.shape[0] // 2 - total_height // 2 + padding
     for i, line in enumerate(lines):
         text_x = int((frame.shape[1] - text_sizes[i][0]) / 2)
         text_y += text_sizes[i][1] + padding
-        cv2.putText(frame, line, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, font_size, color, 1, cv2.LINE_AA)
+        cv2.putText(frame, line, (text_x, text_y), preferred_font, font_size, color, thickness, cv2.LINE_AA)
 
 def write_to_top_left(frame, text, font_size=0.5, color=(255, 255, 255)):
     """
     Writes text to the top left corner of the frame.
     """
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    text_size = cv2.getTextSize(text, font, font_size, 1)[0]
+    text_size = cv2.getTextSize(text, preferred_font, font_size, 1)[0]
     text_x = 5
     text_y = text_size[1] + 5
-    cv2.putText(frame, text, (text_x, text_y), font, font_size, color, 1, cv2.LINE_AA)
+    cv2.putText(frame, text, (text_x, text_y), preferred_font, font_size, color, 1, cv2.LINE_AA)
 
 def await_keys(keys):
     """
@@ -167,8 +169,8 @@ def capture_pose(vid, window_name, examples_left, countdown_time=3):
         count = math.ceil(countdown_time - (time.time() - start_time))
         ret, frame = vid.read()
         video_buffer.append(frame.copy())
-        write_to_top_left(frame, f"Number of examples left: {examples_left}", font_size=0.5, color=(0, 0, 0))
-        write_to_center(frame, str(count), font_size=5, color=(0, 0, 0))
+        write_to_top_left(frame, f"Number of examples left: {examples_left}", font_size=1, color=(0, 0, 255))
+        write_to_center(frame, str(count), font_size=7, color=(0, 0, 255), thickness=5)
         cv2.imshow(window_name, frame)
         if count < 1:
             show_shutter_effect(window_name, frame.shape, 0.3)

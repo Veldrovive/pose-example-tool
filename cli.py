@@ -13,7 +13,7 @@ def snake_to_title(snake):
     return snake.title().replace('_', ' ')
 
 def main():
-    print(f.renderText('Why did I spend time on this?'))
+    print(f.renderText('LET\'S GET POSING!'))
     os.makedirs('./data', exist_ok=True)
 
     example_counts = {}

@@ -1,4 +1,5 @@
 POSES = [
     'pencil',
-    'praise_the_sun'
+    'praise_the_sun',
+    'resting'
 ]
